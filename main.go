@@ -92,7 +92,7 @@ func main() {
 
 		// Sort the available tables by their number and print them.
 		slices.Sort(availableTableNumbers)
-		log.Printf("available tables: %v", availableTableNumbers)
+		log.Printf("available table numbers: %v", availableTableNumbers)
 
 		time.Sleep(3 * time.Second)
 	}
