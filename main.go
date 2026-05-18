@@ -67,17 +67,7 @@ func main() {
 				availableTableNumbers = append(availableTableNumbers, t.Number)
 			}
 
-			var logText string
-			switch t.NumReservations {
-			case 0:
-				logText = fmt.Sprintf("table %d has never been reserved", t.Number)
-			case 1:
-				logText = fmt.Sprintf("table %d has been reserved once", t.Number)
-			default:
-				logText = fmt.Sprintf("table %d has been reserved for %d times", t.Number, t.NumReservations)
-			}
-
-			logs = append(logs, logText)
+			logs = append(logs, fmt.Sprintf("reservation count of table %d: %d", t.Number, t.NumReservations))
 		}
 		lock.Unlock()
 
