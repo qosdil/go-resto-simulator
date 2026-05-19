@@ -113,15 +113,16 @@ func main() {
 
 		// Log the number of customers currently dining and the number of available tables.
 		numAvailableTables := reservation.NumAvailableTables()
-		numCustomersDining := numTables - numAvailableTables
-		log.Printf("# of customers dining: %v", numCustomersDining)
+		log.Printf("# of customers dining: %v", numTables-numAvailableTables)
 		log.Printf("# of available tables: %v", numAvailableTables)
 
 		// Sort the available tables by their number and print them.
 		slices.Sort(availableTableNumbers)
 		log.Printf("available table numbers: %v", availableTableNumbers)
 
-		if isOpen.Load() == false && numCustomersDining == 0 {
+		// If the resto is closed and all tables are available, it means all dining customers are done, so we can fully
+		// close the resto and end the simulation.
+		if isOpen.Load() == false && numAvailableTables == numTables {
 			log.Println("resto is closed now, bye!")
 			break
 		}
