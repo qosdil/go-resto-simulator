@@ -38,20 +38,23 @@ func Reserve(cust *customer.Customer, lock *sync.RWMutex) (*Reservation, error) 
 	}
 
 	var reservationTable *table
+
+	// Find the first available table and reserve it for the customer. Protect the operation with a write lock to
+	// ensure concurrency safety.
 	lock.Lock()
-	derefTables := *Tables()
-	for i, t := range *tables {
+	derefTables := *tables
+	for i, t := range derefTables {
 		if t.IsAvailable == true {
 			derefTables[i].IsAvailable = false
 			derefTables[i].NumReservations++
 			reservationTable = &derefTables[i]
-			numAvailableTables.Store(numAvailableTables.Load() - 1)
 			break
 		}
 	}
 	tables = &derefTables
 	lock.Unlock()
 
+	numAvailableTables.Store(numAvailableTables.Load() - 1)
 	r := &Reservation{Customer: cust, Table: reservationTable}
 
 	// Simulate the dining activity of the customer in a separate goroutine.
